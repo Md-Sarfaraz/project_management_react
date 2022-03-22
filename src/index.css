@@ -4,7 +4,7 @@
 
 @layer utilities{
     .m-content{
-        @apply  ml-[300px] 
+        @apply  md:ml-[280px] 
     }
 }
 
@@ -17,7 +17,7 @@
         @apply bg-gradient-to-bl from-purple-500 via-purple-700 to-purple-900 
     }
     .btn-green{
-        @apply bg-gradient-to-bl from-green-500 via-green-700 to-green-900 
+        @apply bg-gradient-to-bl from-green-500 via-green-700 to-green-900 hover:bg-gradient-to-tr hover:from-green-500 hover:via-green-700 hover:to-green-900 shadow-md shadow-green-700
     }
     .btn-red{
         @apply bg-gradient-to-bl from-red-500 via-red-700 to-red-900 
