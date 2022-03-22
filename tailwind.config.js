@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'modal': 'rgba(0, 0, 0, 0.7)',
+        'modal': 'rgba(10, 10, 10, 0.6)',
       },
     },
   },

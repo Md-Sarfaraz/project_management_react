@@ -5,24 +5,19 @@ import { api } from "./database";
 const listAllUser = async (page, size) => {
     try {
         const res = await api.get("/user/list", { params: { page: page, size: size } });
-       // const res = await api.get("/user/search", { params: { name: 'sh' } }).catch((e)=>{
-              //  console.log(" ",e.message);
-        console.log(res.data)
         return res.data
     } catch (e) {
         return {}
     }
-
-
 }
 
 const listAllSearched = async (saerch) => {
     try {
-    const res = await api.get("/user/search", { params: { name: saerch } })
-    return res.data        
+        const res = await api.get("/user/search", { params: { name: saerch } })
+        return res.data
     } catch (error) {
         console.log(error);
-                return {}
+        return {}
     }
 
 }
@@ -42,7 +37,9 @@ const updateUser = async (data) => {
 
 }
 
-const deleteUser = () => {
+const deleteUser = async (id) => {
+    const res = await api.delete('/user/delete?uid='+id)
+    return res.data
 
 }
 

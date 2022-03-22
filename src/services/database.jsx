@@ -4,7 +4,8 @@ import axios from "axios";
 const api = axios.create({
   baseURL: 'http://192.168.100.7:8090/api',
   headers:{
-    'content-type': 'text/json'
+    'content-type': 'application/json',
+    "Access-Control-Allow-Origin": "*"
   },
   timeout: 5000,
 })

@@ -27,12 +27,11 @@ const AddUser = () => {
             mobile: user.contact,
             address: user.address,
         }
-        console.log(data)
-        // const res = await api.post('/user/save', data);
-        // console.log(res.data)
-        // if (res.data.id) {
-        //     navigate('/user')
-        // }
+        const res = await api.post('/user/save', data);
+        console.log(res.data)
+        if (res.data.id) {
+            navigate('/user')
+        }
 
     }
 

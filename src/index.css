@@ -4,7 +4,7 @@
 
 @layer utilities{
     .m-content{
-        @apply  md:ml-[280px] 
+        @apply  md:ml-[280px]  ml-[-240]
     }
 }
 
