@@ -2,42 +2,57 @@ import React, { useState, useEffect } from 'react'
 import Header from '../components/header'
 import { getOneUserWithInfo, updateUser } from "../services/user-service";
 import { useLocation } from "react-router-dom";
+import { Info } from '../components/alert';
 
 const Profile = () => {
-    const [tabs, setTabs] = useState("activity");
+    const [tabs, setTabs] = useState("settings");
     const { state } = useLocation();
-    console.log(state.data)
-    const [user, setUser] = useState(state.data);
-    const [userData, setUserData] = useState({});
-    const [userCred, setUserCred] = useState({});
-
-    const handleSubmit = async(e) => {
+    const [user, setUser] = useState(state.data); // for User details update in setting tab
+    const [userData, setUserData] = useState({}); // for side info card
+    const [userCred, setUserCred] = useState({});  // for User credentials update in setting tab
+    const [notify ,setNotify] = useState({
+        updated: false,
+    });
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let data = {
+            id: user.id,
             name: user.name,
             email: user.email,
             dob: user.dob,
             mobile: user.mobile,
             address: user.address,
         }
-        console.log(data)
-        //const updateStatus = await updateUser(data)
-        //console.log('updated > ', updateStatus)
-
+        const updateStatus = await updateUser(data)
+        callingServerForUserData()
+        setNotify({...notify, updated:true})
 
     }
     const handleInput = (e) => {
-        
         const name = e.target.name;
         const value = e.target.value;
         setUser({ ...user, [name]: value })
+        setNotify({...notify, updated:false})
+
+    }
+    const handleCredInput = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setUserCred({ ...userCred, [name]: value })
+        setNotify({...notify, updated:false})
+
+    }
+
+    const handleCredSubmit = (e) =>{
+        e.preventDefault();
+        console.log("cred submited", userCred);
+        
     }
 
     const callingServerForUserData = async () => {
-        
         const data = await getOneUserWithInfo(state.data.id)
-
         setUserData(data)
+        setUser(data)
     }
 
     useEffect(() => {
@@ -102,13 +117,15 @@ const Profile = () => {
                             <button className={(tabs === 'settings' ? " btn-indigo text-white " : " ") + 'px-3 py-2 mx-2 font-semibold rounded-md hover:text-white  hover:btn-indigo'} onClick={() => { setTabs("settings") }}>Settings</button>
                         </div>
                     </div> {/* tabs */}
+                    <div className="mt-3 bg-slate-50 rounded-md shadow shadow-indigo-600">
 
-                    <div className="mt-3  bg-slate-50 rounded-md shadow shadow-indigo-600">
                         <div className="px-2 py-2  rounded-md">
                             <div className={(tabs === "activity" ? "" : " hidden ") + "p-4 "}>Activity Under Development</div>{/* Activity */}
                             <div className={(tabs === "project" ? "" : " hidden ") + ""}>projectiss</div>{/* project/issue */}
                             <div className={(tabs === "timeline" ? "" : " hidden ") + "p-4"}>Timeline Under Development</div>{/* timeline */}
                             <div className={(tabs === "settings" ? "" : " hidden ") + ""}>
+                                <Info visible={notify.updated} msg="Update Successfull"/>
+
                                 <div className="">
                                     <div className="">
 
@@ -128,7 +145,7 @@ const Profile = () => {
                                                         type="text" value={user.email} onChange={handleInput} name="email" id="email" autoComplete='off' placeholder="Email" />
                                                 </div>
 
-                                               
+
 
                                                 <div className="mb-4">
                                                     <label className="block  text-sm font-bold mb-2" htmlFor="dob">Date of Birth</label>
@@ -158,43 +175,43 @@ const Profile = () => {
                                             </form>
                                         </div>
                                         <hr className=" mx-8 border-2 border-indigo-800 rounded-full" />
-                                        <div className="">
-                                            <form className=" px-8 pt-6 pb-8 mb-4 grid grid-cols-3 gap-4 select-none" onSubmit={handleSubmit}>
-                                                <span className='col-span-3 px-2 rounded-md mx-auto text-center bg-red-700 text-white font-serif font font-semibold'>Login Credentials</span>
+                                        <div className="p-1">
+                                            <form className=" px-8 pt-6 pb-8 mb-4 grid grid-cols-3 gap-4 select-none" onSubmit={handleCredSubmit}>
+                                                <span className='col-span-3 px-2 rounded-md mx-auto text-center bg-red-700 text-white
+                                                 font-serif font font-semibold'>Login Credentials</span>
                                                 <div className="mb-4 col-span-3">
                                                     <label className="block  text-sm font-bold mb-2" htmlFor="name">Username</label>
                                                     <input className="shadow appearance-none border  bg-slate-200 rounded w-full py-2 px-3  
                                      leading-tight focus:outline-none focus:shadow-outline" disabled
-                                                        type="text" value={user.username} onChange={handleInput} name="name" id="name" autoComplete='off' placeholder="Username" />
+                                                        type="text" value={userCred.username} onChange={handleCredInput} name="name" id="name"
+                                                         autoComplete='off' placeholder="Username" />
                                                 </div>
                                                 <div className="mb-4">
                                                     <label className="block  text-sm font-bold mb-2" htmlFor="oldpass">Old Password</label>
                                                     <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" name="email" id="oldpass" autoComplete='off' placeholder="Old Password" />
+                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.oldpassword} onChange={handleCredInput} 
+                                                        type="text" name="oldpassword" id="oldpass"  autoComplete='off' placeholder="Old Password" />
                                                 </div>
 
                                                 <div className="mb-4">
                                                     <label className="block  text-sm font-bold mb-2" htmlFor="npass">New Password</label>
                                                     <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" name="email" id="npass" autoComplete='off' placeholder="New Password" />
+                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.newpassword} onChange={handleCredInput} 
+                                                        type="text" name="newpassword" id="npass" autoComplete='off' placeholder="New Password" />
                                                 </div>
                                                 <div className="mb-4">
                                                     <label className="block  text-sm font-bold mb-2" htmlFor="cpass">Confirm Password</label>
                                                     <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" name="email" id="cpass" autoComplete='off' placeholder="Confirm Password" />
+                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.confirmpassword} onChange={handleCredInput} 
+                                                        type="text" name="confirmpassword" id="cpass" autoComplete='off' placeholder="Confirm Password" />
                                                 </div>
-
-
                                                 <div className="mb-4 flex justify-start">
                                                     <input className="py-2 px-3 btn-sky rounded text-white"
-                                                        type="button" value={"Back"} />
+                                                        type="reset" value="Back" />
                                                 </div>
                                                 <div className="mb-4 col-span-2 flex justify-end">
                                                     <input className="py-2 px-3 btn-green rounded text-white"
-                                                        type="submit" value={"Update"} />
+                                                        type="submit" value="Update" />
                                                 </div>
                                             </form>
                                         </div>

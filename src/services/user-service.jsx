@@ -31,7 +31,7 @@ const getOneUserWithInfo = async (id) => {
 
 const updateUser = async (data) => {
 
-    const res = await api.post('/user/save', data);
+    const res = await api.post('/user/update', data);
 
     return res.data
 
