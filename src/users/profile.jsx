@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import Header from '../components/header'
-import { getOneUserWithInfo, updateUser } from "../services/user-service";
-import { useLocation } from "react-router-dom";
-import { Info } from '../components/alert';
+import UserService from "../services/user-service";
+import { useLocation, useNavigate } from "react-router-dom";
+import ProfileCard from './components/ProfileCard';
+import { InputField } from '../components/InputField';
+import { Button, Input, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Textarea, Typography } from '@material-tailwind/react';
 
 const Profile = () => {
-    const [tabs, setTabs] = useState("settings");
+    const [openTab, setOpenTab] = useState(1);
     const { state } = useLocation();
+    const service = UserService();
+    const navigate = useNavigate();
     const [user, setUser] = useState(state.data); // for User details update in setting tab
     const [userData, setUserData] = useState({}); // for side info card
-    const [userCred, setUserCred] = useState({});  // for User credentials update in setting tab
-    const [notify ,setNotify] = useState({
+    const [userCred, setUserCred] = useState({
+        id: user.id,
+        username: user.username,
+        oldpassword: '',
+        newpassword: '',
+        confirmpassword: '',
+    });  // for User credentials update in setting tab
+    const [notify, setNotify] = useState({
         updated: false,
     });
     const handleSubmit = async (e) => {
@@ -23,36 +32,51 @@ const Profile = () => {
             mobile: user.mobile,
             address: user.address,
         }
-        const updateStatus = await updateUser(data)
+        const updateStatus = await service.updateUser(data)
         callingServerForUserData()
-        setNotify({...notify, updated:true})
+        setNotify({ ...notify, updated: true })
 
     }
     const handleInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setUser({ ...user, [name]: value })
-        setNotify({...notify, updated:false})
+        setNotify({ ...notify, updated: false })
 
     }
     const handleCredInput = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setUserCred({ ...userCred, [name]: value })
-        setNotify({...notify, updated:false})
+        setNotify({ ...notify, updated: false })
 
     }
 
-    const handleCredSubmit = (e) =>{
+    const handleCredSubmit = async (e) => {
         e.preventDefault();
         console.log("cred submited", userCred);
-        
+        if (!userCred.id) return
+        if (!userCred.username) return
+        if (!userCred.oldpassword) return
+        if (userCred.newpassword.length >= 4 && userCred.newpassword === userCred.confirmpassword) {
+            let cred = {
+                id: userCred.id,
+                oldpassword: userCred.oldpassword,
+                newpassword: userCred.newpassword,
+            }
+            const res = await service.updatePassword(cred)
+            console.log(res)
+
+        }
+
+
     }
 
     const callingServerForUserData = async () => {
-        const data = await getOneUserWithInfo(state.data.id)
-        setUserData(data)
-        setUser(data)
+        const res = await service.getOneUserWithInfo(state.data.id)
+        const newdata = JSON.parse(JSON.stringify(res).replace(/\:null/gi, "\:\"\""));
+        setUserData(newdata)
+        setUser({ ...user, newdata })
     }
 
     useEffect(() => {
@@ -62,167 +86,109 @@ const Profile = () => {
 
 
     return (<>
-        <Header />
-        <div className="m-content mt-14 px-3 py-2 min-h-screen ">
-            <div className="grid grid-cols-12 ">
-                <div className="col-span-3 mt-4">
-                    <div className="p-4 bg-slate-50 rounded-md border-t-4 border-indigo-800 shadow-md shadow-indigo-600 flex flex-col text-center font-sans">
-                        <img className='h-24 w-24 p-2 mx-auto rounded-full' src="https://via.placeholder.com/128x128" alt="Profile" />
-                        <h1>{user.name}</h1>
-                        <p>Role</p>
-                        <hr className='my-2' />
-                        <div className="px-2 py-2 flex justify-between ">
-                            <h3 className='font-bold'>Total Projects</h3>
-                            <h6 className='font-semibold text-blue-900'>9999</h6>
-                        </div>
-                        <hr className='my-2' />
-                        <div className="px-2 py-2 flex justify-between ">
-                            <h3 className='font-bold'>Total Issue Resolved</h3>
-                            <h6 className='font-semibold text-blue-900'>999999</h6>
-                        </div>
-                        <hr className='my-2' />
-                        <button className='px-3 py-2 btn-indigo text-white rounded '>Follow</button>
-                    </div>
-                    <div className="mt-4 pb-4 shadow-md rounded-md bg-slate-50 shadow-indigo-500">
-                        <div className="px-3 py-3 mx-auto text-center rounded-t-md bg-indigo-800 text-white">About</div>
-                        <div className="px-4 py-2 rounded-b-md ">
-                            <h3 className='font-bold'>Current Working Project</h3>
-                            <p className='text-gray-700 pr-4 mx-auto text-right'>Spring Boot Rest API</p>
-                        </div>
-                        <hr className='my-2 mx-6' />
-                        <div className="px-4 py-2 rounded-b-md bg-slate-50">
-                            <h3 className='font-bold'>Email</h3>
-                            <p className='text-gray-700 pr-4 mx-auto text-right'>{userData.email}</p>
-                        </div>
-                        <hr className='my-2 mx-6' />
-                        <div className="px-4 py-2 rounded-b-md bg-slate-50">
-                            <h3 className='font-bold'>Contact</h3>
-                            <p className='text-gray-700 pr-4 mx-auto text-right'>{userData.mobile}</p>
-                        </div>
-                        <hr className='my-2 mx-6' />
-                        <div className="px-4 py-2 rounded-b-md bg-slate-50">
-                            <h3 className='font-bold'>Address</h3>
-                            <p className='text-gray-700'>{userData.address}</p>
-                        </div>
-
-                    </div>
+        <div className="bg-light-blue-500 px-3 md:px-8 h-32" />
+        <div className=" -mt-24 px-3 py-2 min-h-screen ">
+            <div className="grid grid-cols-12 gap-4">
+                <div className="col-span-12 md:col-span-4 mt-4">
+                    <ProfileCard userProfile={userData} />
+                </div>
+                <div className="col-span-12 md:col-span-8 mt-4">
+                    <Tabs value={"settings"} >
+                        <TabsHeader  className='bg-amber-500'>
+                            {/* <Tab value={"activity"}>
+                                Activity
+                            </Tab>
+                            <Tab value={"project"}>
+                                Projects
+                            </Tab>
+                            <Tab value={"tickets"}>
+                                Tickets / Issues
+                            </Tab> */}
+                            <Tab value={"settings"}>
+                                Settings
+                            </Tab>
+                        </TabsHeader>
+                        <TabsBody className="">
+                            <TabPanel value={"activity"}  className={"bg-white rounded-xl drop-shadow-md  my-2"}>
+                                <Typography color="indigo">Activity is Not Done</Typography>
+                            </TabPanel>
+                            <TabPanel value={"project"} className={"bg-white rounded-xl drop-shadow-md  my-2"}>
+                                <Typography color="indigo">Project is Not Done</Typography>
+                            </TabPanel>
+                            <TabPanel value={"tickets"} className={"bg-white rounded-xl drop-shadow-md  my-2"}>
+                                <Typography color="indigo">Tickets is Not Done</Typography>
+                            </TabPanel>
+                            <TabPanel value={"settings"} className={"bg-white rounded-xl drop-shadow-md  my-2"}>
+                                <div className="">
+                                    <form>
+                                        <h6 className="text-purple-500 text-sm mt-3 mb-6 font-light uppercase">User Information</h6>
+                                        <div className="flex flex-wrap mt-10 text-left">
+                                            <input hidden defaultValue={user.id} />
+                                            <div className="w-full lg:w-6/12 pr-4 mb-10 font-light">
+                                                <Input type="text" color="purple" placeholder="Full Name"
+                                                    value={user.name} onChange={handleInput} name="name" />
+                                            </div>
+                                            <div className="w-full lg:w-6/12 pl-4 mb-10 font-light">
+                                                <Input type="email" color="purple" placeholder="Email Address"
+                                                    value={user.email} onChange={handleInput} name="email" />
+                                            </div>
+                                            <div className="w-full lg:w-6/12 pr-4 mb-10 font-light">
+                                                <Input type="date" color="purple" placeholder="Date of Birth"
+                                                    value={user.dob} onChange={handleInput} name="dob" />
+                                            </div>
+                                            <div className="w-full lg:w-6/12 pl-4 mb-10 font-light">
+                                                <Input type="text" color="purple" placeholder="Mobile Number"
+                                                    value={user.mobile} onChange={handleInput} name="mobile" />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-wrap mt-10 font-light text-left">
+                                            <Textarea color="purple" placeholder="Address"
+                                                value={user.address} onChange={handleInput} name="address" />
+                                        </div>
+                                        <div className='flex flex-wrap mt-10 font-light justify-end'>
+                                            <Button color="green" onClick={handleSubmit} ripple >
+                                                Update Information
+                                            </Button>
+                                        </div>
+                                        <hr className="px-8 my-8 bg-slate-500" />
+                                        <h6 className="text-red-500 text-sm my-6 font-light uppercase">
+                                            Login Credentials
+                                        </h6>
+                                        <div className="flex flex-wrap mt-10">
+                                            <div className="w-full lg:w-12/12 mb-10 font-light text-center">
+                                                <Input type="text" color="purple" placeholder="Username" disabled
+                                                    value={userCred.username} onChange={handleCredInput} name="username" />
+                                            </div>
+                                            <div className="w-full lg:w-4/12 pr-4 mb-10 font-light">
+                                                <InputField type="password" color="purple" placeholder="Current Paasword"
+                                                    value={userCred.oldpassword} name="oldpassword" onChange={handleCredInput} />
+                                            </div>
+                                            <div className="w-full lg:w-4/12 px-4 mb-10 font-light">
+                                                <InputField type="password" color="purple" placeholder="New Password"
+                                                    value={userCred.newpassword} onChange={handleCredInput} name="newpassword" />
+                                            </div>
+                                            <div className="w-full lg:w-4/12 pl-4 mb-10 font-light">
+                                                <InputField type="password" color="purple" placeholder="Confirm Password"
+                                                    value={userCred.confirmpassword} onChange={handleCredInput}
+                                                    name="confirmpassword" />
+                                            </div>
+                                        </div>
+                                        <div className='flex flex-wrap mt-10 font-light justify-end'>
+                                            <Button color="teal" onClick={handleCredSubmit}
+                                                ripple >
+                                                Update Password
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </TabPanel>
+                        </TabsBody>
+                    </Tabs>
                 </div>
                 {/* ----------- */}
-                <div className="col-span-9 p-4">
-                    <div className="bg-slate-50 rounded-md shadow shadow-indigo-600 ">
-                        <div className="flex flex-row px-4 py-2" >
-                            <button className={(tabs === 'activity' ? " btn-indigo text-white " : " ") + 'px-3 py-2 mx-2 font-semibold rounded-md hover:text-white  hover:btn-indigo'} onClick={() => { setTabs("activity") }}>Activity</button>
-                            <button className={(tabs === 'project' ? " btn-indigo text-white " : " ") + 'px-3 py-2 mx-2 font-semibold rounded-md hover:text-white  hover:btn-indigo'} onClick={() => { setTabs("project") }}>Project/Issues</button>
-                            <button className={(tabs === 'timeline' ? " btn-indigo text-white " : " ") + 'px-3 py-2 mx-2 font-semibold rounded-md hover:text-white  hover:btn-indigo'} onClick={() => { setTabs("timeline") }}>Timeline</button>
-                            <button className={(tabs === 'settings' ? " btn-indigo text-white " : " ") + 'px-3 py-2 mx-2 font-semibold rounded-md hover:text-white  hover:btn-indigo'} onClick={() => { setTabs("settings") }}>Settings</button>
-                        </div>
-                    </div> {/* tabs */}
-                    <div className="mt-3 bg-slate-50 rounded-md shadow shadow-indigo-600">
 
-                        <div className="px-2 py-2  rounded-md">
-                            <div className={(tabs === "activity" ? "" : " hidden ") + "p-4 "}>Activity Under Development</div>{/* Activity */}
-                            <div className={(tabs === "project" ? "" : " hidden ") + ""}>projectiss</div>{/* project/issue */}
-                            <div className={(tabs === "timeline" ? "" : " hidden ") + "p-4"}>Timeline Under Development</div>{/* timeline */}
-                            <div className={(tabs === "settings" ? "" : " hidden ") + ""}>
-                                <Info visible={notify.updated} msg="Update Successfull"/>
-
-                                <div className="">
-                                    <div className="">
-
-                                        <div className="w-full">
-                                            <form className=" px-8 py-4  grid grid-cols-2 gap-4" onSubmit={handleSubmit}>
-                                                <span className='col-span-2 px-2 rounded-md mx-auto text-center bg-blue-500 text-white text-sm font-serif font font-semibold'>Update Personal Information</span>
-                                                <div className="mb-4 ">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="name">Name</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" value={user.name} onChange={handleInput} name="name" id="name" autoComplete='off' placeholder="Full Name" />
-                                                </div>
-                                                <div className="mb-4 ">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="email">Email</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" value={user.email} onChange={handleInput} name="email" id="email" autoComplete='off' placeholder="Email" />
-                                                </div>
-
-
-
-                                                <div className="mb-4">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="dob">Date of Birth</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="date" value={user.dob} onChange={handleInput} name="dob" id="dob" autoComplete='off' placeholder="Date of Birth" />
-                                                </div>
-                                                <div className="mb-4">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="contact">Contact Number</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="text" value={user.mobile} onChange={handleInput} name="contact" id="contact" autoComplete='off' placeholder="Contact" />
-                                                </div><div className="mb-4 col-span-2">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="address">Address</label>
-                                                    <textarea className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline"
-                                                        type="textarea" value={user.address} onChange={handleInput} name="address" id="address" autoComplete='off' placeholder="Full Address" />
-                                                </div>
-                                                <div className="mb-4 flex justify-start">
-                                                    <input className="py-2 px-3 btn-sky rounded text-white"
-                                                        type="button" value={"Back"} />
-                                                </div>
-                                                <div className="mb-4 flex justify-end">
-                                                    <input className="py-2 px-3 btn-green rounded text-white"
-                                                        type="submit" value={"Update"} />
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <hr className=" mx-8 border-2 border-indigo-800 rounded-full" />
-                                        <div className="p-1">
-                                            <form className=" px-8 pt-6 pb-8 mb-4 grid grid-cols-3 gap-4 select-none" onSubmit={handleCredSubmit}>
-                                                <span className='col-span-3 px-2 rounded-md mx-auto text-center bg-red-700 text-white
-                                                 font-serif font font-semibold'>Login Credentials</span>
-                                                <div className="mb-4 col-span-3">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="name">Username</label>
-                                                    <input className="shadow appearance-none border  bg-slate-200 rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline" disabled
-                                                        type="text" value={userCred.username} onChange={handleCredInput} name="name" id="name"
-                                                         autoComplete='off' placeholder="Username" />
-                                                </div>
-                                                <div className="mb-4">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="oldpass">Old Password</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.oldpassword} onChange={handleCredInput} 
-                                                        type="text" name="oldpassword" id="oldpass"  autoComplete='off' placeholder="Old Password" />
-                                                </div>
-
-                                                <div className="mb-4">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="npass">New Password</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.newpassword} onChange={handleCredInput} 
-                                                        type="text" name="newpassword" id="npass" autoComplete='off' placeholder="New Password" />
-                                                </div>
-                                                <div className="mb-4">
-                                                    <label className="block  text-sm font-bold mb-2" htmlFor="cpass">Confirm Password</label>
-                                                    <input className="shadow appearance-none border rounded w-full py-2 px-3  
-                                     leading-tight focus:outline-none focus:shadow-outline" value={userCred.confirmpassword} onChange={handleCredInput} 
-                                                        type="text" name="confirmpassword" id="cpass" autoComplete='off' placeholder="Confirm Password" />
-                                                </div>
-                                                <div className="mb-4 flex justify-start">
-                                                    <input className="py-2 px-3 btn-sky rounded text-white"
-                                                        type="reset" value="Back" />
-                                                </div>
-                                                <div className="mb-4 col-span-2 flex justify-end">
-                                                    <input className="py-2 px-3 btn-green rounded text-white"
-                                                        type="submit" value="Update" />
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>{/* settings */}
-                        </div>
-                    </div>  {/* tabes contents */}
-                </div>
             </div>
-        </div>
+        </div >
     </>)
 }
 
