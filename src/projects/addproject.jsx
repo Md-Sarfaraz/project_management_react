@@ -10,12 +10,13 @@ export const Addproject = () => {
     const service = ProjectService()
     const { state } = useLocation();
     const loc = useLocation();
-    const [project, setProject] = useState({
+    const [project, setProject] = useState(state?.project ?? {
         id: "",
         name: "",
         detail: "",
         lastDate: "",
         status: "",
+        updated: "",
     });
 
     const saveToServer = async () => {
@@ -25,17 +26,20 @@ export const Addproject = () => {
             detail: project.detail,
             lastDate: project.lastDate,
             status: project.status,
+            created: project.created,
+            updated: project.updated,
         }
         service.saveProject(data, (error) => {
             if (error) return
-            navigate(-1)
+            navigate(-1, { state: { data: data } })
         })
 
     }
     useEffect(() => {
-        if (state) {
-            setProject(state.data)
-        }
+        // if (state) {
+        //     setProject(state.project)
+        //     // setProject({...project, updated: project.updated ?? ""})
+        // }
     }, []);
 
     const handleInput = (e) => {
@@ -86,16 +90,16 @@ export const Addproject = () => {
                                     <Textarea color="purple" label="Project Details"
                                         value={project.detail} onChange={handleInput} name="detail" />
                                 </div>
-                                <div className={(state.title ? "" : " hidden ") + " flex flex-wrap mt-10"}>
+                                <div className={(state?.title ? "" : " hidden ") + " flex flex-wrap mt-10"}>
                                     <div className="w-full lg:w-6/12 pr-4 font-light">
                                         <label htmlFor="created" className='pb-2 pl-4 text-sm text-blue-grey-600'>Created At : </label>
-                                        <Input type="date" color="purple" label="Created At"  id="created"
-                                            value={project.created} name="created" disabled />
+                                        <Input type="date" color="purple" label="Created At" id="created"
+                                            value={project.created ?? ""} name="created" disabled />
                                     </div>
                                     <div className="w-full lg:w-6/12 md:pl-4 font-light">
-                                    <label htmlFor="updated" className='pb-2 pl-4 text-sm text-blue-grey-600'>Last Updated At</label>
+                                        <label htmlFor="updated" className='pb-2 pl-4 text-sm text-blue-grey-600'>Last Updated At</label>
                                         <Input type="date" color="purple" label="Last Updated At" id='updated'
-                                            value={project.updated} name="updated" disabled />
+                                            value={project.updated ?? ""} name="updated" disabled />
                                     </div>
                                 </div>
                                 <div className="flex flex-wrap mt-10">
@@ -107,7 +111,7 @@ export const Addproject = () => {
                                         <Select variant="outlined" label="Select Status" color='purple'
                                             className="shadow  transition ease-in-out  appearance-none border rounded w-full py-2 px-3 
                                         bg-slate-50  leading-tight focus:outline-none focus:shadow-outline"
-                                            onChange={handleInput} name="status" id="status"
+                                            onChange={handleInput} name="status" id="status" value={project.status}
                                             autoComplete='off' placeholder="Contact" defaultValue={"DEVELOPMENT"} >
                                             <Option value="ACTIVE">Active</Option>
                                             <Option value="DEVELOPMENT">Development</Option>

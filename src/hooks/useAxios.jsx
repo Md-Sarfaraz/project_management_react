@@ -9,13 +9,11 @@ const useAxios = () => {
 
     const isExpired = () => {
         const token = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
-        if (!token.accessToken) {
-            console.log("No Access Token Present");
-            return
-        }
-        let decoded = jwtDecode(token.accessToken)
-        var seconds = (new Date(decoded.exp).getTime() - new Date().getTime()) / 1000;
-        return new Date() > new Date(decoded.exp)
+        if (!token.accessToken) return console.log("No Access Token Present")
+        let decoded = jwtDecode(token?.accessToken)
+        var d = new Date(0)
+        d.setUTCSeconds(decoded?.exp)
+        return new Date() > d
     }
 
 
@@ -33,13 +31,13 @@ const useAxios = () => {
             // console.log(" isExpired in Config :: ", isExpired());
 
             if (!LocalStorage.getValue(TOKEN_STORAGE_KEY, {})?.refreshToken) return config
-            if (!isExpired())  {
+            if (!isExpired()) {
                 const token = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
                 config.headers['Authorization'] = "Bearer " + token.accessToken
                 // console.log("return expire config>> ", isExpired());
                 return config
             } else {
-                // console.log("Fetching New Acces Token");
+                //console.log("Else Fetching New Acces Token");
                 const token = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
 
                 const response = await axios.get(BASE_URL + "/token/refresh", {

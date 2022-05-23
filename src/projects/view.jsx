@@ -44,14 +44,14 @@ const ViewProject = () => {
   }
 
   const loadNewUserData = async () => {
-    const userData = await service.getAllRelatedUsers(project.id);
-    setUsers(userData);
+    await service.getAllRelatedUsers(project.id, (data, error) => {
+      if (error) return console.log(error);
+      setUsers(data);
+    })
   }
   const loadTicketsData = async () => {
     await ticketService.listAllByProject(project.id, (data, error) => {
-      if (error) return
-      console.log(data.data);
-      
+      if (error) return console.log(error);
       setTickets(data.data);
     })
     //console.log(ticketdate[0]);
@@ -75,16 +75,14 @@ const ViewProject = () => {
 
   }
   const editProject = () => {
-    navigate('/project/add', { state: { data: project, title: "Edit Project" } })
+    navigate('/project/add', { state: { project, title: "Edit Project" } })
   }
   const assingMember = async () => {
-    try {
-      await service.addUserToProject(project.id, userState.newUser.id);
+    await service.addUserToProject(project.id, userState.newUser.id, (error) => {
+      if (error) return setUserState({ ...userState, open: true })
       loadNewUserData()
       setUserState({ ...userState, open: false })
-    } catch (error) {
-      setUserState({ ...userState, open: true })
-    }
+    });
   }
 
   const unassingMember = async () => {

@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardBody, CardFooter, } from '@material-tailwind/react';
 import { Button, Input, Textarea } from '@material-tailwind/react';
-import { api } from '../services/api';
+import AuthContext from '../context/auth-context'
 import { InputField } from '../components/InputField';
 
 const SignUp = () => {
     const navigate = useNavigate();
-    const inref = useRef();
+    const { signUpUser } = useContext(AuthContext);
     const [pass, setPass] = useState(false);
     const [isValue, setIsValue] = useState(false);
 
@@ -45,11 +45,15 @@ const SignUp = () => {
             mobile: user.contact,
             address: user.address,
         }
-        const res = await api.post('/user/save', data);
-        console.log(res.data)
-        if (res.data.id) {
+        // const res = await api.post('/user/save', data);
+        // console.log(res.data)
+        // if (res.data.id) {
+
+        // }
+        await signUpUser(data, () => {
             navigate('/user')
-        }
+        })
+
 
     }
 

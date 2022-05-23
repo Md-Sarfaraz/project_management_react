@@ -36,12 +36,12 @@ export default function Sidebar() {
                 <div className="flex flex-col">
                     <hr className="my-4 min-w-full" />
                     <ul className="flex-col min-w-full flex list-none">
-                        <li className={(Auth.isLoggedIn() ? " " : "hidden ") + " hover:bg-light-blue-500 hover:text-white rounded-lg mb-4"}>
+                        <li className={(isLoggedIn ? " " : "hidden ") + " hover:bg-light-blue-500 hover:text-white rounded-lg mb-4"}>
                             <CustomLink to={"/"}
                                 className="flex items-center gap-4 text-sm  font-light px-4 py-3 rounded-lg" >
                                 <MdDashboard className="w-6 h-6" />Dashboard</CustomLink>
                         </li>
-                        <hr className="mb-4 min-w-full" />  {/* Rular ######## */}
+                        <hr className={(isLoggedIn?"":"hidden")+" mb-4 min-w-full" }/>  {/* Rular ######## */}
 
                         <li className="rounded-lg mb-4">
                             <div className="flex items-center gap-4 select-none hover:bg-light-blue-500 hover:text-white text-sm  font-light px-4 py-3 rounded-lg"

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import { theme } from "../utility/datatable.config";
-import { api } from "../services/api";
 import { IoClose } from 'react-icons/io5'
 import { MdVisibility, MdDelete } from 'react-icons/md'
 import Service from "../services/user-service";
@@ -82,20 +81,20 @@ const Member = () => {
     const handlePerRowsChange = async (newPerPage, page) => {
         setLoading(true);
 
-        const response = await api.get(`/user/list?page=${page}&size=${newPerPage}`);
+        // const response = await api.get(`/user/list?page=${page}&size=${newPerPage}`);
 
-        setUsers(response.data.data);
-        setPerPage(newPerPage);
-        setLoading(false);
+        // setUsers(response.data.data);
+        // setPerPage(newPerPage);
+        // setLoading(false);
     };
 
     const handleSort = (column, sortDirection) => {
         const callSort = async () => {
             if (column.sortField) {
                 setLoading(true);
-                const response = await api.get(`/user/list?sort=${column.sortField}&order=${sortDirection}`);
-                setUsers(response.data.data);
-                setLoading(false);
+                // const response = await api.get(`/user/list?sort=${column.sortField}&order=${sortDirection}`);
+                // setUsers(response.data.data);
+                // setLoading(false);
             }
 
         }

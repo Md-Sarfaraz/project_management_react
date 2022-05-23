@@ -12,59 +12,6 @@ const AuthProvider = (props) => {
     const [token, setToken] = useState({})
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const test = {
-        "relatedProjects": [],
-        "TotalRelatedProject": 0,
-        "totalProject": 185,
-        "totalRelatedTicket": 1,
-        "totalUsers": 185,
-        "relatedTicket": [
-            {
-                "created": "2022-04-08",
-                "project": {
-                    "name": "Domainer",
-                    "id": 27
-                },
-                "submitter": {
-                    "name": "Ramesh Kumar",
-                    "id": 7
-                },
-                "assignedUser": {
-                    "name": "Davon Longrigg",
-                    "id": 482
-                },
-                "status": "ACTIVE",
-                "name": "performance issue",
-                "priority": "HIGH",
-                "id": 13,
-                "type": null,
-                "updated": "2022-04-08",
-                "detail": "server not worlong lag",
-                "lastDate": "2022-06-25"
-            }
-        ],
-        "topLevelRole": "ROLE_ADMIN",
-        "totalTicket": 5,
-        "user": {
-            "id": 7,
-            "name": "Ramesh Kumar",
-            "email": "ramesh@gmail.com",
-            "username": "ramesh",
-            "dob": "2022-01-12",
-            "mobile": "7946857495",
-            "address": "asansol railpar",
-            "active": false,
-            "roles": [
-                "ROLE_MANAGER",
-                "ROLE_ADMIN",
-                "ROLE_PUBLIC"
-            ]
-        },
-        "token": {
-            "refreshToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1lc2giLCJpc3MiOiIvYXBpL2xvZ2luIiwiZXhwIjoxNjYwODUwNTY0fQ.TIn3eLNkocUwemKL83csGH5yiP2qDlpY7XZNsuLn6f8",
-            "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyYW1lc2giLCJyb2xlcyI6WyJST0xFX01BTkFHRVIiLCJST0xFX0FETUlOIiwiUk9MRV9QVUJMSUMiXSwiaXNzIjoiL2FwaS9sb2dpbiIsIm5hbWUiOiJSYW1lc2ggS3VtYXIiLCJpZCI6NywiZXhwIjoxNjUzMDg1MzY0LCJlbWFpbCI6InJhbWVzaEBnbWFpbC5jb20ifQ.Y-o_SSXIujYPs4YZTkgFmlQZtE7HulABS5e8HbFsnoY"
-        }
-    }
 
     const saveInfo = (data) => {
         const related = {
@@ -106,8 +53,7 @@ const AuthProvider = (props) => {
             })
     }
 
-    const logoutUser = () => {
-        //Auth.logout()
+    const logoutUser = (callback) => {
         LocalStorage.removeValue(TOKEN_STORAGE_KEY);
         LocalStorage.removeValue(USER_STORAGE_KEY);
         LocalStorage.removeValue(USER_INFO_KEY);
@@ -115,6 +61,12 @@ const AuthProvider = (props) => {
         setInfo({})
         setToken({})
         setIsLoggedIn(false);
+        callback();
+
+    }
+
+    const signUpUser = (data, callback) => {
+        console.log('Not Working');
 
     }
 
@@ -145,6 +97,7 @@ const AuthProvider = (props) => {
             isLoggedIn,
             loginUser,
             logoutUser,
+            signUpUser
         }}>
             {props.children}
         </AuthContext.Provider>

@@ -7,7 +7,7 @@ const ProjectService = () => {
 
     const listAllProject = async (page, size) => {
         try {
-            const res = await api.get("/project/list", { params: { page: page, size: size } });
+            const res = await api.get("/project/list", { params: { p: page, s: size } });
             return res.data
         } catch (e) {
             return {}
@@ -17,7 +17,7 @@ const ProjectService = () => {
 
     const listAllSearched = async (saerch) => {
         try {
-            const res = await api.get("/project/search", { params: { name: saerch } })
+            const res = await api.get("/project/search", { params: { q: saerch } })
             return res.data
         } catch (error) {
             console.log(error);
@@ -49,15 +49,26 @@ const ProjectService = () => {
         const res = await api.delete('/project/delete?id=' + id)
         return res.data
     }
-    const addUserToProject = async (projectId, UserId) => {
-        let data = { pid: projectId, uid: UserId }
-        const res = await api.post('/project/users/add', data);
-        return res.data
+    const addUserToProject = async (projectId, UserId, callback) => {
+        return await api.post('/project/users/add', { pid: projectId, uid: UserId })
+        .then((response) => {
+            console.log(response.data);
+            callback()
+        })
+        .catch((error) => {
+            callback(error.response)
+        })
     }
 
-    const getAllRelatedUsers = async (pid) => {
-        const res = await api.get('/project/users?pid=' + pid);
-        return res.data
+    const getAllRelatedUsers = async (pid, callback) => {
+        return await api.get('/project/users/list?id=' + pid)
+            .then((response) => {
+                callback(response?.data)
+            })
+            .catch((error) => {
+                console.log(error);
+                callback(error.response?.data, error.response?.status)
+            })
     }
 
     const removeRelatedUsers = async (projectId, UserId) => {

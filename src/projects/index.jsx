@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 import DataTable from 'react-data-table-component';
-import {MdVisibility,MdDelete} from 'react-icons/md'
+import { MdVisibility, MdDelete } from 'react-icons/md'
+// eslint-disable-next-line
 import { theme } from "../utility/datatable.config";
 import ProjectService from "../services/project-service";
 import { useDebounce } from '../hooks/useDebounce';
@@ -23,7 +24,7 @@ const Project = () => {
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
-  
+
     const getDUserData = async (p) => {
         setLoading(true)
         const data = await service.listAllProject(p, perPage);
@@ -51,6 +52,7 @@ const Project = () => {
             }
         }
         showSearched()
+        // eslint-disable-next-line
     }, [debounce])
 
 
@@ -129,11 +131,11 @@ const Project = () => {
             cell: row => (<>
                 <IconButton color="light-blue" size="sm" className={"mr-2"} variant="text"
                     ripple onClick={() => { navigate('/project/view', { state: { data: row } }) }}   >
-                 <MdVisibility className='h-5 w-5'/>
+                    <MdVisibility className='h-5 w-5' />
                 </IconButton>
                 <IconButton color="red" size="sm" variant='text'
                     ripple onClick={() => { setSelectedProject({ open: true, row: row }) }}    >
-                    <MdDelete className='h-5 w-5'/>
+                    <MdDelete className='h-5 w-5' />
                 </IconButton>
             </>),
             width: "6rem",
@@ -156,8 +158,6 @@ const Project = () => {
 
 
     return (<> <div className="bg-light-blue-500 px-3 md:px-8 h-32" />
-
-
 
         <Dialog open={selectedProject.open} handler={() => { setSelectedProject({ open: false, row: {} }) }}>
             <DialogHeader >
@@ -190,20 +190,23 @@ const Project = () => {
             <Card>
                 <CardHeader color='purple' size="sm" className='p-4'>
                     <div className="w-full flex items-center justify-between">
-                        <h2 className="text-white text-2xl">Project List</h2>
-                        <Button color="purple" className='p-3' ripple
-                            onClick={() => { navigate('/project/add') }} >
-                            Add Project
-                        </Button>
+                        <div className="flex flex-row">
+                            <h2 className="text-white text-2xl">Project List</h2>
+                        </div>
+                        <div className="flex flex-initial">
+                            <Button color="purple" ripple className=''
+                                onClick={() => { navigate('/project/add') }} >
+                                Add Project
+                            </Button>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardBody>
                     <div className=" rounded-b-lg 0">
-                        <div className="flex flex-row-reverse  px-4 pt-4 ">
-                            <div className=" md:w-1/5 ">
-
+                        <div className="flex flex-row-reverse w-full  px-4 pt-4 ">
+                            <div className="w-full md:w-1/5  mr-0 md:mr-4">
                                 <Input type="text" color="purple" value={searchValue} onChange={handleSearch}
-                                    placeholder="Search Member" icon={<i className="fas fa-heart" />} />
+                                    placeholder="Search Project" icon={<i className="fas fa-heart" />} />
                             </div>
                         </div>
                         <div className="pb-2 pr-2 select-none duration-1000 transition-all ">
