@@ -39,15 +39,14 @@ const useAxios = () => {
             } else {
                 //console.log("Else Fetching New Acces Token");
                 const token = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
-
                 const response = await axios.get(BASE_URL + "/token/refresh", {
                     headers: { "Authorization": "Bearer " + token.refreshToken }
                 });
                 const { accessToken } = response.data
-                const tokens = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
-                tokens.accessToken = accessToken
-                LocalStorage.saveValue(TOKEN_STORAGE_KEY, token)
-
+                LocalStorage.saveValue(TOKEN_STORAGE_KEY, {
+                    refreshToken: token.refreshToken,
+                    accessToken: accessToken,
+                });
                 config.headers['Authorization'] = "Bearer " + accessToken
 
                 return config;

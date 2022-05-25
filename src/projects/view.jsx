@@ -46,6 +46,8 @@ const ViewProject = () => {
   const loadNewUserData = async () => {
     await service.getAllRelatedUsers(project.id, (data, error) => {
       if (error) return console.log(error);
+      console.log(data);
+      
       setUsers(data);
     })
   }
