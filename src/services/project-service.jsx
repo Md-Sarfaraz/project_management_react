@@ -51,13 +51,13 @@ const ProjectService = () => {
     }
     const addUserToProject = async (projectId, UserId, callback) => {
         return await api.post('/project/users/add', { pid: projectId, uid: UserId })
-        .then((response) => {
-            console.log(response.data);
-            callback()
-        })
-        .catch((error) => {
-            callback(error.response)
-        })
+            .then((response) => {
+                console.log(response.data);
+                callback()
+            })
+            .catch((error) => {
+                callback(error.response)
+            })
     }
 
     const getAllRelatedUsers = async (pid, callback) => {
@@ -71,10 +71,15 @@ const ProjectService = () => {
             })
     }
 
-    const removeRelatedUsers = async (projectId, UserId) => {
-        let data = { pid: projectId, uid: UserId }
-        const res = await api.post('/project/users/delete', data);
-        return res.data
+    const removeRelatedUsers = async (projectId, UserId, callback) => {
+        return await api.post('/project/users/remove', { pid: projectId, uid: UserId })
+            .then((response) => {
+                console.log(response.data);
+                callback()
+            })
+            .catch((error) => {
+                callback(error.response)
+            })
     }
 
     return {

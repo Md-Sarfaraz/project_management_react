@@ -4,12 +4,24 @@ const TicketService = () => {
 
     const api = useAxios()
 
+
+    const getOne = async (ticketId, callback) => {
+        return await api.get("/ticket/" + ticketId)
+            .then((response) => {
+                callback(response.data)
+            }).catch((er) => {
+                console.log(er);
+                callback(er.response?.data, er.response)
+            })
+
+    }
+
     const listAllByProject = async (project_id, callback) => {
         return await api.get("/ticket/list", { params: { project: project_id } })
             .then((response) => {
                 callback(response.data)
             }).catch((er) => {
-                console.log(er);
+                console.error(er);
                 callback(er.response?.data, er.response)
             })
 
@@ -21,7 +33,7 @@ const TicketService = () => {
             .then((response) => {
                 callback(response.data)
             }).catch((er) => {
-                console.log(er);
+                console.error(er);
                 callback(er.response.data, er.response.status)
             })
 
@@ -63,7 +75,7 @@ const TicketService = () => {
     }
 
     const assignUser = async (ticketId, userId, callback) => {
-        return await api.post('/ticket/user/assign', { ticket_id: ticketId, user_id: userId })
+        return await api.post('/ticket/user/assign', { ticketId, userId })
             .then((response) => {
                 if (response.status === 200) {
                     callback()
@@ -75,6 +87,7 @@ const TicketService = () => {
     }
 
     return {
+        getOne,
         listAllByProject,
         listAll,
         listAllSearched,

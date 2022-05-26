@@ -5,21 +5,17 @@ import TicketService from '../services/ticket-service';
 import DataTable from 'react-data-table-component';
 import { MdVisibility, MdDelete, MdAssignmentInd } from 'react-icons/md'
 import { Button, Card, CardBody, CardHeader, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Input } from '@material-tailwind/react';
-import AssignUser from './components/assign-user';
+
 const Tickets = () => {
     const navigate = useNavigate();
     const service = TicketService();
     const [tickets, setTickets] = useState([])
-    const [DeleteTicket, setDeleteTicket] = useState({
-        open: false,
-        row: {}
-    })
+    const [DeleteTicket, setDeleteTicket] = useState({ open: false, row: {} })
     const [searchValue, setSearchValues] = useState("")
     const debounce = useDebounce(searchValue, 1000)
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
-    const [dialog, setDialog] = useState({ assign: false, reloadData: false });
 
     const getTicketData = async (p) => {
         try {
@@ -37,12 +33,12 @@ const Tickets = () => {
         getTicketData(1)
     }, [])
 
-    useEffect(() => {
-        if (dialog.reloadData) {
-            getTicketData(1)
-            setDialog({ ...dialog, reloadData: false })
-        }
-    }, [dialog.reloadData])
+    // useEffect(() => {
+    //     if (dialog.reloadData) {
+    //         getTicketData(1)
+    //         setDialog({ ...dialog, reloadData: false })
+    //     }
+    // }, [dialog.reloadData])
 
 
 
@@ -91,7 +87,7 @@ const Tickets = () => {
     };
 
     const handleSort = (column, sortDirection) => {
-        console.log(column);
+        // console.log(column);
         const callSort = async () => {
             if (column.sortField) {
                 //     setLoading(true);
@@ -106,24 +102,23 @@ const Tickets = () => {
     }
 
     const columns = [
-
         {
             name: 'Name',
             selector: row => row.name,
             sortable: true,
             sortField: 'name',
-        },
-        {
+        }, {
             name: 'Project',
             selector: row => row.project?.name,
 
-        },
-        {
+        }, {
+            name: 'Submitter',
+            selector: row => row.submitter?.name,
+        }, {
             name: 'Assign To',
             selector: row => row.assignedUser?.name,
 
-        },
-        {
+        }, {
             name: 'Type',
             selector: row => {
                 return row.type
@@ -131,28 +126,21 @@ const Tickets = () => {
             sortable: true,
             sortField: 'name',
             width: "6rem",
-        },
-        {
+        }, {
             name: 'Status',
             selector: row => row.status,
             sortable: true,
             sortField: 'name',
             width: "6rem",
-        },
-        {
+        }, {
             name: 'Priority',
             selector: row => row.priority,
             sortable: true,
             sortField: 'name',
             width: "6rem",
-        },
-        {
+        }, {
             name: 'Actions',
             cell: row => (<>
-                <IconButton color="indigo" variant='text' size='sm' className={"mr-2"}
-                    ripple onClick={() => { setDialog({ assign: true, ticket: row }) }}    >
-                    <MdAssignmentInd className='h-5 w-5' />
-                </IconButton>
                 <IconButton color="light-blue" variant='text' className={"mr-2"} size="sm"
                     ripple onClick={() => { navigate('/ticket/view', { state: { data: row } }) }}   >
                     <MdVisibility className='h-5 w-5' />
@@ -163,7 +151,6 @@ const Tickets = () => {
                 </IconButton>
             </>),
             width: "8rem",
-
         },
     ];
 
@@ -179,7 +166,7 @@ const Tickets = () => {
     </div>;
     return (<>
         <div className="bg-light-blue-500 px-3 md:px-8 h-32" />
-        <AssignUser open={dialog} setOpen={setDialog} />
+        {/* <AssignUser open={assignUserDialog} setOpen={setAssignUserDialog} /> */}
         <Dialog open={DeleteTicket.open} handler={() => setDeleteTicket({ open: false, row: {} })}>
             <DialogHeader >
                 <p className='mr-8 text-black    font-semibold'>Are You Sure to Delete This Ticket ? </p>

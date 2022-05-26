@@ -47,7 +47,7 @@ const ViewProject = () => {
     await service.getAllRelatedUsers(project.id, (data, error) => {
       if (error) return console.log(error);
       console.log(data);
-      
+
       setUsers(data);
     })
   }
@@ -88,13 +88,11 @@ const ViewProject = () => {
   }
 
   const unassingMember = async () => {
-    try {
-      await service.removeRelatedUsers(project.id, userState.newUser.id);
+    await service.removeRelatedUsers(project.id, userState.newUser.id, (error) => {
+      if (error) return setUserState({ ...userState, delete: true })
       loadNewUserData()
       setUserState({ ...userState, delete: false })
-    } catch (error) {
-      setUserState({ ...userState, delete: true })
-    }
+    });
   }
   const addTicket = () => {
     navigate('/ticket/add', { state: { project: project } })
