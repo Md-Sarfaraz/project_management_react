@@ -16,10 +16,11 @@ import Footer from './components/Footer';
 import Login from './auth/login';
 import AuthProvider, { AuthContext } from './context/auth-context';
 import Roles from './users/roles';
-import AdminNavbar from './components/AdminNavbar';
+import Navbar from './components/Navbar';
 import SignUp from './auth/sign-up';
 import Tickets from './tickets';
 import { useContext, useEffect } from 'react';
+import About from './home/about';
 
 function App() {
   const version = "0.0.1";
@@ -35,6 +36,7 @@ function App() {
 
           <Route path="*" element={<NoMatch />} />
           <Route path='blog' element={<Blog />} />
+          <Route path='about' element={<About />} />
           {/* Users/Members */}
           {["user/add"].map((path, index) =>
             <Route path={path} element={<AddUser />} key={index} />
@@ -75,7 +77,7 @@ function WithSideNav({ version }) {
         <div className="bg-grey-100 md:ml-64 flex-grow">
           <Outlet />
 
-          <Footer version={version}/>
+          <Footer version={version} />
         </div>
       </div>
     </div>
@@ -86,7 +88,7 @@ function WithoutSidebar({ version }) {
 
   return (
     <div className=' bg-gradient-dark w-screen min-h-screen relative flex flex-col justify-between'>
-      <AdminNavbar noSideBar />
+      <Navbar noSideBar />
       <Outlet />
       <Footer version={version} />
     </div>

@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import CustomLink from "../utility/custom-link";
-import AdminNavbar from './AdminNavbar';
-import Auth from '../services/auth-service';
+import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import { Typography, IconButton } from '@material-tailwind/react';
 import { MdHome, MdDashboard, MdBugReport, MdAccountTree, MdArrowDropDown, MdArrowDropUp, MdGroups, MdLogout } from 'react-icons/md'
@@ -26,7 +25,7 @@ export default function Sidebar() {
 
 
     return (<>
-        <AdminNavbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+        <Navbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
         <div className={`h-screen fixed top-0 md:left-0 ${showSidebar} overflow-y-auto 
                 flex-row flex-nowrap overflow-hidden shadow-xl bg-white w-64 z-10 py-4 px-6 transition-all duration-300`} >
             <div className="flex-col items-stretch min-h-full flex-nowrap px-0 relative">

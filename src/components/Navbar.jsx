@@ -1,8 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Image, Menu, Avatar, IconButton, Input, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
+import { Button, Menu,  IconButton, Input, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
 import ProfilePicture from '../assets/img/team-1-800x800.jpg';
-import Dashboard from '../users/dashboard';
 import { MdFingerprint, MdOutlineMenu, MdClose } from "react-icons/md";
 import { ImUserPlus, ImNewspaper } from 'react-icons/im'
 import { MdHome, MdInfo } from 'react-icons/md'
@@ -10,7 +9,7 @@ import CustomLink from '../utility/custom-link';
 import { AuthContext } from '../context/auth-context';
 
 
-export default function AdminNavbar({ showSidebar, setShowSidebar, noSideBar }) {
+export default function Navbar({ showSidebar, setShowSidebar, noSideBar }) {
     const location = useLocation().pathname;
     const navigate = useNavigate();
     const { isLoggedIn, logoutUser, currentUser } = useContext(AuthContext)
