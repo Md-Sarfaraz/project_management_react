@@ -29,7 +29,6 @@ const useAxios = () => {
     instance.interceptors.request.use(
         async (config) => {
             // console.log(" isExpired in Config :: ", isExpired());
-
             if (!LocalStorage.getValue(TOKEN_STORAGE_KEY, {})?.refreshToken) return config
             if (!isExpired()) {
                 const token = LocalStorage.getValue(TOKEN_STORAGE_KEY, {})
@@ -51,6 +50,7 @@ const useAxios = () => {
 
                 return config;
             }
+
         }, (error) => {
             return Promise.reject(error);
         });

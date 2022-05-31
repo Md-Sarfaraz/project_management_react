@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Card, CardHeader, CardBody, CardFooter, } from '@material-tailwind/react';
+import { Card, CardHeader, CardBody, } from '@material-tailwind/react';
 import { Button, Input, Textarea } from '@material-tailwind/react';
-import AuthContext from '../context/auth-context'
-import { InputField } from '../components/InputField';
+import { AuthContext } from '../context/auth-context'
 
 const SignUp = () => {
     const navigate = useNavigate();
     const { signUpUser } = useContext(AuthContext);
-    const [pass, setPass] = useState(false);
-    const [isValue, setIsValue] = useState(false);
+    // const [pass, setPass] = useState(false);
+    // const [isValue, setIsValue] = useState(false);
 
     const [user, setUser] = useState({
         name: "",
@@ -23,12 +22,6 @@ const SignUp = () => {
     });
 
     useEffect(() => {
-        const tempSet = async () => {
-            setUser({ ...user, password: "rajraj" });
-            setUser({ ...user, confirmpass: "rajraj" });
-            console.error("Testing Only ")
-        }
-        //  tempSet()
 
 
     }, [])
@@ -45,12 +38,10 @@ const SignUp = () => {
             mobile: user.contact,
             address: user.address,
         }
-        // const res = await api.post('/user/save', data);
-        // console.log(res.data)
-        // if (res.data.id) {
 
-        // }
-        await signUpUser(data, () => {
+
+        await signUpUser(data, (error) => {
+            if (error) return console.log('error', error)
             navigate('/user')
         })
 
@@ -72,9 +63,9 @@ const SignUp = () => {
         } else if (user.password.length < 4) {
             alert('Password Must be 5 Character Long')
         }
-        console.log(user);
+        // console.log(user);śś
 
-        // saveToServer()
+        saveToServer()
     }
 
 

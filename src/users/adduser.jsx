@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Card, CardHeader, CardBody, CardFooter, } from '@material-tailwind/react';
+import { Card, CardHeader, CardBody, } from '@material-tailwind/react';
 import { Button, Input, Textarea } from '@material-tailwind/react';
-import { api } from '../services/api';
+import UserService from '../services/user-service';
 import { InputField } from '../components/InputField';
 
 const AddUser = () => {
     const navigate = useNavigate();
-    const inref = useRef();
+    const userService = UserService()
     const [pass, setPass] = useState(false);
     const [isValue, setIsValue] = useState(false);
 
@@ -23,7 +23,7 @@ const AddUser = () => {
     });
 
     useEffect(() => {
-      
+
     }, [])
 
 
@@ -38,11 +38,11 @@ const AddUser = () => {
             mobile: user.contact,
             address: user.address,
         }
-        // const res = await api.post('/user/save', data);
-        // console.log(res.data)
-        // if (res.data.id) {
-        //     navigate('/user')
-        // }
+        userService.saveUser(data, (error) => {
+            if (error) return console.log('Error : ', error.data)
+            navigate('/user')
+        })
+
 
     }
 
@@ -63,7 +63,7 @@ const AddUser = () => {
         }
         console.log(user);
 
-        // saveToServer()
+        saveToServer()
     }
 
 

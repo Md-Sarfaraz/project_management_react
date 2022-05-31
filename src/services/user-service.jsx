@@ -34,12 +34,28 @@ const UserService = () => {
     const getOneUserWithInfo = async (id) => {
         const res = await api.get(`/user/view/info/${id}`);
         return res.data
-
     }
 
-    const updateUser = async (data) => {
-        const res = await api.post('/user/update', data);
-        return res.data
+    const saveUser = async (data, callback) => {
+        console.log("Data : ", data);
+        return await api.post('/user/save', data)
+            .then((res) => {
+                console.log(res);
+                
+                callback()
+            }).catch((er) => {
+                console.log(er);
+                callback(er.response)
+            })
+    }
+    const updateUser = async (data, callback) => {
+        return await api.post('/user/update', data)
+            .then(() => {
+                callback()
+            }).catch((er) => {
+                console.log(er);
+                callback(er.response)
+            })
     }
 
 
@@ -74,6 +90,7 @@ const UserService = () => {
         deleteUser,
         updatePassword,
         updateRoles,
+        saveUser,
     }
 }
 

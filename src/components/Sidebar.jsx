@@ -40,7 +40,7 @@ export default function Sidebar() {
                                 className="flex items-center gap-4 text-sm  font-light px-4 py-3 rounded-lg" >
                                 <MdDashboard className="w-6 h-6" />Dashboard</CustomLink>
                         </li>
-                        <hr className={(isLoggedIn?"":"hidden")+" mb-4 min-w-full" }/>  {/* Rular ######## */}
+                        <hr className={(isLoggedIn ? "" : "hidden") + " mb-4 min-w-full"} />  {/* Rular ######## */}
 
                         <li className="rounded-lg mb-4">
                             <div className="flex items-center gap-4 select-none hover:bg-light-blue-500 hover:text-white text-sm  font-light px-4 py-3 rounded-lg"
@@ -105,8 +105,10 @@ export default function Sidebar() {
                     <ul className="flex-col min-w-full flex list-none absolute bottom-0">
                         <li className={(isLoggedIn ? " " : "hidden ") + " bg-gradient-to-tr from-red-500  to-red-800 px-4 rounded-lg text-white mb-2"}>
                             <a href="#" className="flex items-center gap-4 text-sm font-light py-3" onClick={() => {
-                                logoutUser();
-                                navigate("/login");
+                                logoutUser(() => {
+
+                                    navigate("/login");
+                                });
 
                             }}>
                                 <MdLogout className="h-6 w-6" />Log Out</a>

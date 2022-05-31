@@ -1,12 +1,13 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { BASE_URL } from "../hooks/useAxios";
+import UserService from "../services/user-service";
 import LocalStorage, { TOKEN_STORAGE_KEY, USER_INFO_KEY, USER_STORAGE_KEY } from "../utility/storage";
 
 const AuthContext = createContext();
 
 const AuthProvider = (props) => {
-
+    const userService = UserService();
     const [currentUser, setCurrentUser] = useState({})
     const [info, setInfo] = useState({})
     const [token, setToken] = useState({})
@@ -41,7 +42,6 @@ const AuthProvider = (props) => {
                     setCurrentUser(response.data.user)
                     setToken(response.data.token)
                     setIsLoggedIn(response.data.token ? true : false)
-                    console.log(response.data);
                     callback();
                 }
             }).catch((err) => {
@@ -61,13 +61,14 @@ const AuthProvider = (props) => {
         setInfo({})
         setToken({})
         setIsLoggedIn(false);
-        callback();
+        if (callback instanceof Function) callback();
 
     }
 
     const signUpUser = (data, callback) => {
-        console.log('Not Working');
-
+        console.log("singup user");
+        
+        userService.saveUser(data, callback)
     }
 
     const initialSetup = async () => {
