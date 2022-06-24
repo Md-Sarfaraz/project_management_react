@@ -54,12 +54,12 @@ const Login = () => {
                     </CardHeader>
                     <CardBody className=' '>
                         <div className="mt-4 mb-8 px-4">
-                            <Input type="text" color="light-blue" placeholder="Username" error={error.username}
+                            <Input type="text" color="light-blue" label="Username" error={error.username}
                                 icon={<i className="account_circle" />} value={user.username} onChange={handleInput} name="username" />
                         </div>
 
                         <div className="mb-4 px-4">
-                            <Input type="password" color="light-blue" placeholder="password" error={error.password}
+                            <Input type="password" color="light-blue" label="password" error={error.password}
                                 icon={<i className="lock" />} value={user.password} onChange={handleInput} name="password" />
                         </div>
                     </CardBody>

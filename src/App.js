@@ -90,7 +90,7 @@ function WithoutSidebar({ version }) {
     <div className=' bg-gradient-dark w-screen min-h-screen relative flex flex-col justify-between'>
       <Navbar noSideBar />
       <Outlet />
-      <Footer version={version} />
+      <Footer version={version} dark/>
     </div>
 
   );

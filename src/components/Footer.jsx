@@ -2,7 +2,7 @@ export default function Footer({ dark ,version}) {
     return (
         <footer className={(dark ? "border-grey-50" : "border-gray-200 ") + " py-6 px-16 border-t font-light flex flex-col lg:flex-row justify-between items-center"}>
             <p className={(dark ? "text-grey-50" : "text-gray-700") + " mb-6 lg:mb-0"}>
-                Copyright &copy; {new Date().getFullYear()} <span className="px-4  text-indigo-900"> Version : {version}</span>
+                Copyright &copy; {new Date().getFullYear()} <span className={(dark? " text-white":" text-indigo-900")+" px-4 font-serif font-bold"}> Version : {version}</span>
             </p>
             <div className="">
                 <p className={(dark ? "text-grey-50" : "text-gray-700") + "  mb-6 lg:mb-0"}>
