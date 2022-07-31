@@ -206,7 +206,7 @@ const Project = () => {
                         <div className="flex flex-row-reverse w-full  px-4 pt-4 ">
                             <div className="w-full md:w-1/5  mr-0 md:mr-4">
                                 <Input type="text" color="purple" value={searchValue} onChange={handleSearch}
-                                    placeholder="Search Project" icon={<i className="fas fa-heart" />} />
+                                    label="Search Project" icon={<i className="fas fa-heart" />} />
                             </div>
                         </div>
                         <div className="pb-2 pr-2 select-none duration-1000 transition-all ">

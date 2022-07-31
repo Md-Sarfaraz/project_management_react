@@ -88,36 +88,36 @@ const AddUser = () => {
                             </h6>
                             <div className="flex flex-wrap mt-10 ">
                                 <div className="w-full lg:w-12/12 mb-10 font-light">
-                                    <Input type="text" color="blue" placeholder="Full Name"
+                                    <Input type="text" color="blue" label="Full Name"
                                         value={user.name} onChange={handleInput} name="name" />
                                 </div>
                                 <div className="w-full lg:w-6/12 pr-4 mb-10 font-light">
-                                    <Input type="email" color="blue" placeholder="Email Address"
+                                    <Input type="email" color="blue" label="Email Address"
                                         value={user.email} onChange={handleInput} name="email" />
                                 </div>
                                 <div className="w-full lg:w-6/12 pl-4 mb-10 font-light">
-                                    <Input type="text" color="blue" placeholder="Username"
+                                    <Input type="text" color="blue" label="Username"
                                         value={user.username} onChange={handleInput} name="username" />
                                 </div>
                                 <div className="w-full lg:w-6/12 pr-4 mb-10 font-light" >
-                                    <InputField type={"password"} placeholder="Password" color="blue"
+                                    <Input type={"password"} label="Password" color="blue"
                                         value={user.password} onChange={handleInput} name="password" />
                                 </div>
                                 <div className="w-full lg:w-6/12 pl-4 mb-10 font-light">
-                                    <InputField type={"password"} placeholder="Confirm Password" color="blue"
+                                    <Input type={"password"} label="Confirm Password" color="blue"
                                         value={user.confirmpass} onChange={handleInput} name="confirmpass" />
                                 </div>
                                 <div className="w-full lg:w-6/12  mb-10 font-light">
-                                    <Input type="date" color="blue" placeholder="Date of Birth"
+                                    <Input type="date" color="blue" label="Date of Birth"
                                         value={user.dob} onChange={handleInput} name="dob" id="dob" />
                                 </div>
                                 <div className="w-full lg:w-6/12 pl-4 mb-10 font-light">
-                                    <Input type="text" color="blue" placeholder="Mobile Number"
+                                    <Input type="text" color="blue" label="Mobile Number"
                                         value={user.contact} onChange={handleInput} name="contact" />
                                 </div>
                             </div>
                             <div className="flex flex-wrap mt-10 font-light">
-                                <Textarea color="blue" placeholder="Full Address"
+                                <Textarea color="blue" label="Full Address"
                                     value={user.address} onChange={handleInput} name="address" />
                             </div>
                             <div className="flex flex-wrap justify-between mt-10 font-light">

@@ -195,7 +195,7 @@ const Roles = () => {
                                     <div className=" md:w-2/5 ">
                                         <Input type="text" color="light-blue" icon={<i className="fas fa-heart" />}
                                             value={searchValue} onChange={handleSearch}
-                                            placeholder="Search Member" />
+                                            label="Search Member" />
                                     </div>
                                 </div>
                                 <div className="md:p-4 select-none  rounded-b-lg">

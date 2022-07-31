@@ -112,7 +112,7 @@ export const Addproject = () => {
                                             className="shadow  transition ease-in-out  appearance-none border rounded w-full py-2 px-3 
                                         bg-slate-50  leading-tight focus:outline-none focus:shadow-outline"
                                             onChange={handleInput} name="status" id="status" value={project.status}
-                                            autoComplete='off' placeholder="Contact" defaultValue={"DEVELOPMENT"} >
+                                            autoComplete='off' defaultValue={"DEVELOPMENT"} >
                                             <Option value="ACTIVE">Active</Option>
                                             <Option value="DEVELOPMENT">Development</Option>
                                             <Option value="COMPLETED">Completed</Option>
